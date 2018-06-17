@@ -1,8 +1,23 @@
 <ion-view view-title="Metronome">
   <ion-content>
-    <h1>Metromome!</h1>
+    <h1>Metronome!</h1>
     <button ng-click="met.startClick()" class="button button-clear button-assertive">Start</button>
     <button ng-click="met.stopClick()" class="button button-clear button-assertive">Stop</button>
+    <div class="inputContainer">
+      <label for="tempo">BPM:</label>
+      <input type="text" name="tempo" ng-model="met.metSettings.startingTempo">
+    </div>
 
+    <select name="subSelect" id="subSelect" placeholder="Subdivisions"
+      ng-options="option.name for option in met.metSettings.subdivs track by option.value"
+      ng-model="met.metSettings.subdivision"></select>
+
+    <select name="tsSelect" id="tsSelect" placeholder="Time Signitures"
+      ng-options="option.name for option in met.metSettings.timeSignitures track by option.value"
+      ng-model="met.metSettings.timeSigniture"></select>
+
+      <select name="accSelect" id="accSelect" placeholder="Accent"
+        ng-options="option.name for option in met.metSettings.accentPlacements track by option.value"
+        ng-model="met.metSettings.accent"></select>
   </ion-content>
 </ion-view>
