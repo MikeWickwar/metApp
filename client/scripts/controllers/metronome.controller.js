@@ -1,13 +1,23 @@
 import Moment from 'moment';
 import { Controller } from 'angular-ecmascript/module-helpers';
 
+// Override Meteor._debug to filter for custom msgs
+Meteor._debug = (function (super_meteor_debug) {
+  return function (error, info) {
+    if (!(info && _.has(info, 'msg')))
+      super_meteor_debug(error, info);
+  }
+})(Meteor._debug);
 
+var room = new ReactiveVar('lobby');
+var _s;
 export default class MetromomeCtrl extends Controller {
   constructor() {
       super(...arguments);
       var interval;
       var workingTs = 1;
       var met = this;
+      this.sessionId = 1;
 
       var acc = new Howl({
           src: ['sounds/woodblock.wav']
@@ -17,10 +27,11 @@ export default class MetromomeCtrl extends Controller {
           src: ['sounds/block.wav']
         });
 
-
-
-
       this.metSettings = {
+        userId : "",
+        room : "",
+        messageInput: "",
+        running: false,
         startingTempo : 100,
         subdivision : {"name" : "quarter", "value": 1},
         timeSigniture : {"name" : "4/4" , "value": 4},
@@ -49,6 +60,8 @@ export default class MetromomeCtrl extends Controller {
                 ]
             }
 
+
+
     function playClick(){
       accPlace = met.metSettings.accent.value;
 
@@ -73,15 +86,102 @@ export default class MetromomeCtrl extends Controller {
 
     this.startClick = function() {
       $("ion-content").css('background-color', '#c4ffcc')
-      playClick();
+      interval ? clearInterval(interval) : "" ;
+      met.metSettings.running = true;
+      // playClick();
       interval = setInterval(playClick, (60000 / this.metSettings.startingTempo) / this.metSettings.subdivision.value); //(60000 / temp) / sub divisoon
     }
     this.stopClick = function() {
       $("ion-content").css('background-color', 'white')
       clearInterval(interval)
+      met.metSettings.running = false;
       workingTs = 1;
     }
+
+    this.showCreateRoom = function(){
+      $("#createRoomContainer").show()
+    }
+
+    this.createRoom = function(){
+      //this sends the msg to the server to broadcast
+      Streamy.emit('hello', { userId: this.metSettings.userId,
+                              room: this.metSettings.room
+                            });
+      debugger
+      //listen for messages for this room
+      Streamy.on(this.metSettings.room, function(d, s) {
+        debugger
+        met.metSettings.startingTempo = parseInt(d.metSettings.startingTempo);
+        met.metSettings.running = d.metSettings.running
+        $("#tempo").val(parseInt(d.metSettings.startingTempo))
+        if(met.metSettings.running === true){
+           met.startClick()
+        }
+        console.log(d);
+        debugger
+      });
+    }
+
+    this.sendMessage = function(elm){
+      var val = $("#messageInput").val()
+      //send message to the server
+      Streamy.emit('sendText', {
+         data: val,
+         room: this.metSettings.room,
+         metSettings: this.metSettings
+       });
+    }
+
+    Streamy.on('hello', function(d, s) {
+      console.log(d.data.userId);
+      Streamy.emit('hello', { userId: this.metSettings.userId,
+                              room: this.metSettings.room
+                            });
+    });
+
+    //listener for user joining the room
+    Streamy.on('__join__', function(d, s) {
+      console.log(d.sid);
+      _s = d.sid;
+      console.log(d.userId);
+      console.log(d.room);
+      debugger
+    });
+
+    this.messages = function() {
+      var current_room = this.metSettings.room;
+
+      return Messages.find({
+        $or: [
+          { 'room': current_room },
+          { 'room': null } // Direct messages
+        ]
+      });
+    }
+
+    this.rooms = function() {
+      return Streamy.rooms();
+    }
+    // // Send a message to all connected sessions (Client & server)
+    // Streamy.broadcast('__join__', { data: {userId: this.metSettings.userId} });
+
   }
 }
 
 MetromomeCtrl.$name = 'MetronomeCtrl';
+
+// Send a message to all connected sessions (Client & server)
+// Streamy.broadcast('hello', { data: {userId: this.metSettings.userId} });
+//
+// // Attach an handler for a specific message
+// Streamy.on('hello', function(d, s) {
+//   console.log(d.data.userId); // Will print 'world!'
+//   // On the server side only, the parameter 's' is the socket which sends the message, you can use it to reply to the client, see below
+// });
+
+// Send a message
+// from client to server
+// Streamy.emit('hello', { data: {handle: 'world!'} });
+
+// from server to client, you need an instance of the client socket (retrieved inside an 'on' callback or via `Streamy.sockets(sid)`)
+// Streamy.emit('hello  ', { data: 'world!' }, _s);

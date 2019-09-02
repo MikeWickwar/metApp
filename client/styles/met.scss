@@ -1,5 +1,11 @@
 .inputContainer{
   display: flex;
   align-items: baseline;
-  
+
+}
+#createRoomContainer{
+  display: none;
+}
+#createRoomContainer input{
+  border:1px solid black;
 }

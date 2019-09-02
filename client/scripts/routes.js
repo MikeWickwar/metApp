@@ -19,7 +19,16 @@ export default class RoutesConfig extends Config {
             controller: 'MetronomeCtrl as met'
           }
         }
-      });
+      })
+      .state('tab.MetSession', {
+      url: '/Metronome/:sessionId',
+      views: {
+        'tab-metronome-session': {
+          templateUrl: metronomeTemplateUrl,
+          controller: 'MetronomeCtrl as met'
+        }
+      }
+    })
 
     this.$urlRouterProvider.otherwise('tab/Metronome');
   }
