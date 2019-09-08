@@ -11,6 +11,7 @@ Meteor._debug = (function (super_meteor_debug) {
 
 var room = new ReactiveVar('lobby');
 var _s;
+
 export default class MetromomeCtrl extends Controller {
   constructor() {
       super(...arguments);
@@ -85,17 +86,26 @@ export default class MetromomeCtrl extends Controller {
     }
 
     this.startClick = function() {
-      $("ion-content").css('background-color', '#c4ffcc')
-      interval ? clearInterval(interval) : "" ;
-      met.metSettings.running = true;
-      // playClick();
-      interval = setInterval(playClick, (60000 / this.metSettings.startingTempo) / this.metSettings.subdivision.value); //(60000 / temp) / sub divisoon
+      //shoots msg to the server to broadcast start and apply met settings
+      if(this.metSettings.room !== ""){
+        Streamy.emit("Start", met.metSettings);
+      }else{
+        $("ion-content").css('background-color', '#c4ffcc')
+        interval ? clearInterval(interval) : "" ;
+        debugger
+        interval = setInterval(playClick, (60000 / this.metSettings.startingTempo) / this.metSettings.subdivision.value); //(60000 / temp) / sub divisoon
+      }
     }
     this.stopClick = function() {
-      $("ion-content").css('background-color', 'white')
-      clearInterval(interval)
-      met.metSettings.running = false;
-      workingTs = 1;
+      //shoots msg to the server to broadcast stop and apply met settings
+      if(this.metSettings.room !== ""){
+        Streamy.emit("Stop", met.metSettings);
+      }else{
+        $("ion-content").css('background-color', 'white')
+        clearInterval(interval)
+        met.metSettings.running = false;
+        workingTs = 1;
+      }
     }
 
     this.showCreateRoom = function(){
@@ -107,20 +117,41 @@ export default class MetromomeCtrl extends Controller {
       Streamy.emit('hello', { userId: this.metSettings.userId,
                               room: this.metSettings.room
                             });
-      debugger
+
       //listen for messages for this room
       Streamy.on(this.metSettings.room, function(d, s) {
-        debugger
-        met.metSettings.startingTempo = parseInt(d.metSettings.startingTempo);
-        met.metSettings.running = d.metSettings.running
-        $("#tempo").val(parseInt(d.metSettings.startingTempo))
-        if(met.metSettings.running === true){
-           met.startClick()
-        }
+        // met.metSettings.startingTempo = parseInt(d.metSettings.startingTempo);
+        // met.metSettings.running = d.metSettings.running
+        // $("#tempo").val(parseInt(d.metSettings.startingTempo))
+        // if(met.metSettings.running === true){
+        //    met.startClick()
+        // }
         console.log(d);
-        debugger
       });
+
+      room.set(met.metSettings.room)
+
+      Streamy.on(room.curValue + "StartClick", function(d, s) {
+        $("ion-content").css('background-color', '#c4ffcc')
+        interval ? clearInterval(interval) : "" ;
+        met.metSettings.startingTempo = parseInt(d.startingTempo);
+        met.metSettings.running = d.running
+        $("#tempo").val(parseInt(d.startingTempo))
+        // interval = setInterval(playClick, (60000 / d.startingTempo) / d.subdivision.value); //(60000 / temp) / sub divisoon
+      })
+
+      Streamy.on(room.curValue + "PlayClick", function(d, s){
+        playClick()
+      })
+
+      Streamy.on(room.curValue + "StopClick", function(d, s) {
+        $("ion-content").css('background-color', 'white')
+        clearInterval(interval)
+        met.metSettings.running = false;
+        workingTs = 1;
+      })
     }
+
 
     this.sendMessage = function(elm){
       var val = $("#messageInput").val()
