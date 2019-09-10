@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.42",
+    "@ionic/angular": "^4.9.0",
     "angular": "^1.7.2",
     "angular-animate": "^1.7.2",
     "angular-ecmascript": "0.0.3",

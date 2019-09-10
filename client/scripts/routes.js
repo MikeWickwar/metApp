@@ -1,36 +1,36 @@
 import { Config } from 'angular-ecmascript/module-helpers';
 
 import metronomeTemplateUrl from '../templates/metronome.html';
-import tabsTemplateUrl from '../templates/tabs.html';
+import mainTemplateUrl from '../templates/main.html';
 
 export default class RoutesConfig extends Config {
   configure() {
     this.$stateProvider
-      .state('tab', {
-        url: '/tab',
+      .state('main', {
+        url: '/main',
         abstract: true,
-        templateUrl: tabsTemplateUrl
+        templateUrl: mainTemplateUrl
       })
-      .state('tab.Metronome', {
+      .state('main.Metronome', {
         url: '/Metronome',
         views: {
-          'tab-metronome': {
+          'main-metronome': {
             templateUrl: metronomeTemplateUrl,
             controller: 'MetronomeCtrl as met'
           }
         }
       })
-      .state('tab.MetSession', {
+      .state('main.MetSession', {
       url: '/Metronome/:sessionId',
       views: {
-        'tab-metronome-session': {
+        'main-metronome-session': {
           templateUrl: metronomeTemplateUrl,
           controller: 'MetronomeCtrl as met'
         }
       }
     })
 
-    this.$urlRouterProvider.otherwise('tab/Metronome');
+    this.$urlRouterProvider.otherwise('main/Metronome');
   }
 }
 

@@ -1,5 +1,10 @@
 <ion-view view-title="Metronome">
   <ion-content>
+    <ion-nav-bar>
+      <ion-nav-buttons side="left">
+        <button ng-click="met.showRoomSettings()" id="showRoomSettings" class="button button-clear button-positive button-icon ion-ios-cog"></button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
     <h1>Metronome!</h1>
     <button ng-click="met.startClick()" class="button button-clear button-assertive">Start</button>
     <button ng-click="met.stopClick()" class="button button-clear button-assertive">Stop</button>
@@ -19,17 +24,6 @@
     <select name="accSelect" id="accSelect" placeholder="Accent"
       ng-options="option.name for option in met.metSettings.accentPlacements track by option.value"
       ng-model="met.metSettings.accent"></select>
-
-    <button ng-click="met.showCreateRoom()" class="button button-clear button-assertive">Create/Join a Room</button>
-    <div id="createRoomContainer">
-      <label for="tempo">User Id:</label>
-      <input type="text" id="userId" name="userId" ng-model="met.metSettings.userId">
-      <label for="tempo">Room Name:</label>
-      <input type="text" id="roomName" name="roomName" ng-model="met.metSettings.room">
-      <button ng-click="met.createRoom()" class="button button-clear button-assertive">Join Room</button>
-      <input type="text" id="messageInput" name="messageInput" ng-model="met.metSettings.messageInput">
-      <button ng-click="met.sendMessage()" class="button button-clear button-assertive">Send Text</button>
-    </div>
 
 
   </ion-content>

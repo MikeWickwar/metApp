@@ -1,0 +1,20 @@
+<ion-modal-view ng-controller="MetronomeCtrl as met">
+  <ion-header-bar>
+    <h1 class="title">Room Settings!</h1>
+    <div class="buttons">
+      <button class="button button-clear button-positive" ng-click="met.hideRoomSettings()">Cancel</button>
+    </div>
+  </ion-header-bar>
+
+  <ion-content>
+    <div id="createRoomContainer">
+      <label for="tempo">User Id:</label>
+      <input type="text" id="userId" name="userId" ng-model="met.metSettings.userId">
+      <label for="tempo">Room Name:</label>
+      <input type="text" id="roomName" name="roomName" ng-model="met.metSettings.room">
+      <button ng-click="met.createRoom()" class="button button-clear button-assertive">Join Room</button>
+      <input type="text" id="messageInput" name="messageInput" ng-model="met.metSettings.messageInput">
+      <button ng-click="met.sendMessage()" class="button button-clear button-assertive">Send Text</button>
+    </div>
+  </ion-content>
+</ion-modal-view>

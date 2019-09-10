@@ -108,6 +108,15 @@ export default class MetromomeCtrl extends Controller {
       }
     }
 
+    this.showRoomSettings = function(){
+      this.ShowRoomSettings.show()
+    }
+
+    this.hideRoomSettings = function(){
+      this.ShowRoomSettings.hide()
+    }
+
+
     this.showCreateRoom = function(){
       $("#createRoomContainer").show()
     }
@@ -150,7 +159,9 @@ export default class MetromomeCtrl extends Controller {
         met.metSettings.running = false;
         workingTs = 1;
       })
-    }
+    } //end create room
+
+
 
 
     this.sendMessage = function(elm){
@@ -200,7 +211,7 @@ export default class MetromomeCtrl extends Controller {
 }
 
 MetromomeCtrl.$name = 'MetronomeCtrl';
-
+MetromomeCtrl.$inject = ['ShowRoomSettings']
 // Send a message to all connected sessions (Client & server)
 // Streamy.broadcast('hello', { data: {userId: this.metSettings.userId} });
 //

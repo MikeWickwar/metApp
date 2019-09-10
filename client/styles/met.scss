@@ -1,11 +1,17 @@
+// @import ".meteor/local/build/programs/server/assets/packages/meteoric_ionic-sass/ionic";
+
 .inputContainer{
   display: flex;
   align-items: baseline;
 
 }
 #createRoomContainer{
-  display: none;
+  // display: none;
 }
 #createRoomContainer input{
   border:1px solid black;
+}
+#showRoomSettings{
+  outline-color: black;
+  color: black;
 }
