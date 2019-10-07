@@ -13,3 +13,19 @@
 .slide-in-right.ng-leave, .slide-in-right > .ng-leave {
   -webkit-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms; }
+
+#createRoomContainer{
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  justify-content: space-around;
+}
+
+#createRoomContainer input{
+  border: 1px solid #2c2c2c;
+  width: 80%;
+  margin-left: 10%;
+  border-radius: 7px;
+  padding-left: 5px;
+}

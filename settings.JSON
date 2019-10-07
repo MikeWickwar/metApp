@@ -1,0 +1,10 @@
+{
+  "public":
+  {
+    "analytics": "123456789"
+  },
+  "private":
+  {
+    "MONGO_URL": "mongodb+srv://metLinkAdmin:FuckingMongo1!@metlinkcluster0-w8qh8.mongodb.net/test?retryWrites=true&w=majority"
+  }
+}

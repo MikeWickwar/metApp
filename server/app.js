@@ -54,11 +54,11 @@ Streamy.on('hello', function(data, from) {
       'roomName': data.room
     })
   }else{
-    // Rooms.update({
-    //   'sid': Streamy.id(from)
-    // }, {
-    //   $set: { 'userId': data.userId, 'roomName': data.room }
-    // });
+    Rooms.update({
+      'sid': Streamy.id(from)
+    }, {
+      $set: { 'userId': data.userId, 'roomName': data.room }
+    });
   }
 
   // Inform the room
@@ -76,8 +76,10 @@ Streamy.on("Start", function(data, from) {
   Streamy.broadcast(data.room + "StartClick", data, from);
   //set interval on the server, then play broadcast play click to user to make sure click is synced for all users
   function serverClick() {
-    Streamy.broadcast(data.room + "PlayClick", data, from)
+    console.log("click now")
+    Streamy.broadcast(data.room + "PlayClick", data , from)
   }
+  
   _interval = setInterval(serverClick, (60000 / data.startingTempo) / data.subdivision.value); //(60000 / temp) / sub divisoon
 })
 

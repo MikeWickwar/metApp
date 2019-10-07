@@ -5,7 +5,8 @@ import 'angular-sanitize';
 import 'angular-ui-router';
 import 'ionic-scripts';
 import Angular from 'angular';
-import { SidebarModule } from 'ng-sidebar';
+// import { MatSliderModule } from '@angular/material/slider'
+// import { SidebarModule } from 'ng-sidebar';
 import Loader from 'angular-ecmascript/module-loader';
 import { Meteor } from 'meteor/meteor';
 // Modules

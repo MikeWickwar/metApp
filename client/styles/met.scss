@@ -8,10 +8,113 @@
 #createRoomContainer{
   // display: none;
 }
-#createRoomContainer input{
-  border:1px solid black;
-}
+
 #showRoomSettings{
   outline-color: black;
   color: black;
+}
+
+//pulse animation
+@keyframes shadow-pulse {
+     0% {
+          box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+     }
+     100% {
+          box-shadow: 0 0 0 35px rgba(0, 0, 0, 0);
+     }
+}
+#toggleStartStop{
+  height: 120px;
+  width: 80%;
+  border-radius: 90px;
+  /* text styles */
+  text-decoration: none;
+  color: #fff;
+  font-size: 25px;
+  // font-family: sans-serif;
+  font-weight: 400;
+  font-family: 'Orbitron', sans-serif;
+
+}
+.start {
+   animation: shadow-pulse 2s infinite;
+   background-color: green; /*for compatibility with older browsers*/
+   background-image: -webkit-linear-gradient(green, lightgreen);
+   background-image: -o-linear-gradient(green, lightgreen);
+   background-image: linear-gradient(green, lightgreen);
+
+}
+
+.stop {
+   // animation: shadow-pulse 2s infinite;
+   background-color: red; /*for compatibility with older browsers*/
+   background-image: -webkit-linear-gradient(red, pink);
+   background-image: -o-linear-gradient(red, pink);
+   background-image: linear-gradient(red, pink);
+}
+
+#toggleStartStop:hover{
+    border-style: outset;
+    border-width: 2px;
+    box-shadow: none;
+    background: black;
+    cursor: pointer;
+}
+
+.btnContainer{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.tempoContainer,
+.tempoContainer input,
+#tempo{
+  font-family: 'Orbitron', sans-serif;
+}
+#tempo{
+  font-size: 60px;
+}
+#rangeContainer{
+  height: 150px;
+  display: flex;
+}
+.tempoContainer input{
+  height: 70px;
+}
+.tempoContainer{
+  height: 40vh;
+}
+.tempoContainer,
+.tempoContainer input,
+.tempoContainer label{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+//slider stuff
+input[type=range][orient=vertical] {
+  -webkit-appearance: none;
+  background: transparent;
+  transform: rotate(0.75turn); //make vertical
+
+}
+input[type=range][orient=vertical]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  margin-top: -8px;
+  border-radius: 99px;
+  background: purple;
+}
+input[type=range][orient=vertical]::-webkit-slider-runnable-track {
+  width: 300px;
+  height: 4px;
+  background: red;
 }

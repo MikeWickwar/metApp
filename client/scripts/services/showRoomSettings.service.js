@@ -1,6 +1,8 @@
 import { Service } from 'angular-ecmascript/module-helpers';
+import { MetromomeCtrl } from '../controllers/metronome.controller.js';
 
 import settingsTemplateUrl from '../../templates/settings.html';
+var _lastScope;
 
 export default class ShowRoomSettingsService extends Service {
   constructor() {
@@ -9,22 +11,31 @@ export default class ShowRoomSettingsService extends Service {
     this.templateUrl = settingsTemplateUrl;
   }
 
-  show() {
-    this.scope = this.$rootScope.$new();
-
+  show(data) {
+    this.scope = this.$rootScope.$resume();
+    debugger
     this.$ionicModal.fromTemplateUrl(this.templateUrl, {
       animation: 'slide-in-right',
-      scope: this.scope
+      scope: this.scope,
+      modelData: data
     })
     .then((modal) => {
       this.modal = modal;
       this.modal.show();
+      debugger
+      this.modal.modelData.metSettings.room
     });
   }
 
-  hide() {
+  cancel() {
+    debugger
     this.scope.$destroy();
     this.modal.remove();
+  }
+
+  dismiss(data) {
+    this.modal.hide();
+    return data.metSettings.room
   }
 }
 

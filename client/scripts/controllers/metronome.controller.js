@@ -1,5 +1,8 @@
 import Moment from 'moment';
 import { Controller } from 'angular-ecmascript/module-helpers';
+// import {MatSliderModule} from 'angular/material/slider'
+import settingsTemplateUrl from '../../templates/settings.html';
+import { Service } from 'angular-ecmascript/module-helpers';
 
 // Override Meteor._debug to filter for custom msgs
 Meteor._debug = (function (super_meteor_debug) {
@@ -9,7 +12,7 @@ Meteor._debug = (function (super_meteor_debug) {
   }
 })(Meteor._debug);
 
-var room = new ReactiveVar('lobby');
+var _room = new ReactiveVar('');
 var _s;
 
 export default class MetromomeCtrl extends Controller {
@@ -19,7 +22,8 @@ export default class MetromomeCtrl extends Controller {
       var workingTs = 1;
       var met = this;
       this.sessionId = 1;
-
+      this.templateUrl = settingsTemplateUrl;
+      var that = this;
       var acc = new Howl({
           src: ['sounds/woodblock.wav']
         });
@@ -30,10 +34,11 @@ export default class MetromomeCtrl extends Controller {
 
       this.metSettings = {
         userId : "",
-        room : "",
+        room : $("input[name=hiddenRoom]").val(),
         messageInput: "",
         running: false,
         startingTempo : 100,
+        interval: 1250,
         subdivision : {"name" : "quarter", "value": 1},
         timeSigniture : {"name" : "4/4" , "value": 4},
         accent :   {"name" : "DownBeats" , "value" : "DownBeats"},
@@ -87,12 +92,13 @@ export default class MetromomeCtrl extends Controller {
 
     this.startClick = function() {
       //shoots msg to the server to broadcast start and apply met settings
-      if(this.metSettings.room !== ""){
+      met.metSettings.rrom !== $("input[name=hiddenRoom]").val() ? met.metSettings.room = $("input[name=hiddenRoom]").val() : met.metSettings.room = met.metSettings.room;
+      if($("input[name=hiddenRoom]").val() !== ""){
         Streamy.emit("Start", met.metSettings);
       }else{
-        $("ion-content").css('background-color', '#c4ffcc')
+        $("#toggleStartStop").removeClass('start')
+        $("#toggleStartStop").addClass('stop')
         interval ? clearInterval(interval) : "" ;
-        debugger
         interval = setInterval(playClick, (60000 / this.metSettings.startingTempo) / this.metSettings.subdivision.value); //(60000 / temp) / sub divisoon
       }
     }
@@ -101,19 +107,41 @@ export default class MetromomeCtrl extends Controller {
       if(this.metSettings.room !== ""){
         Streamy.emit("Stop", met.metSettings);
       }else{
-        $("ion-content").css('background-color', 'white')
+        $("#toggleStartStop").removeClass('stop')
+        $("#toggleStartStop").addClass('start')
         clearInterval(interval)
         met.metSettings.running = false;
         workingTs = 1;
       }
     }
 
-    this.showRoomSettings = function(){
-      this.ShowRoomSettings.show()
+    this.toggleStartStop = function(){
+      var val = $("#toggleStartStop").text()
+      if (val === "Start") {
+        playClick()
+        met.startClick()
+        $("#toggleStartStop").text("Stop")
+        $("#toggleStartStop").removeClass("start")
+        $("#toggleStartStop").addClass("stop")
+      }else{
+        met.stopClick()
+        $("#toggleStartStop").text("Start")
+        $("#toggleStartStop").removeClass("stop")
+        $("#toggleStartStop").addClass("start")
+      }
+
     }
 
-    this.hideRoomSettings = function(){
-      this.ShowRoomSettings.hide()
+    this.showRoomSettings = function(){
+      this.ShowRoomSettings.show(met)
+    }
+
+    this.hideRoomSettings = function(data){
+      met.metSettings.room = this.ShowRoomSettings.dismiss(data)
+      $("input[name=hiddenRoom]").val(met.metSettings.room)
+    }
+    this.cancelRoomSettings = function(){
+      this.ShowRoomSettings.cancel()
     }
 
 
@@ -122,6 +150,7 @@ export default class MetromomeCtrl extends Controller {
     }
 
     this.createRoom = function(){
+      met.hideRoomSettings(met)
       //this sends the msg to the server to broadcast
       Streamy.emit('hello', { userId: this.metSettings.userId,
                               room: this.metSettings.room
@@ -138,9 +167,8 @@ export default class MetromomeCtrl extends Controller {
         console.log(d);
       });
 
-      room.set(met.metSettings.room)
 
-      Streamy.on(room.curValue + "StartClick", function(d, s) {
+      Streamy.on(met.metSettings.room + "StartClick", function(d, s) {
         $("ion-content").css('background-color', '#c4ffcc')
         interval ? clearInterval(interval) : "" ;
         met.metSettings.startingTempo = parseInt(d.startingTempo);
@@ -149,15 +177,23 @@ export default class MetromomeCtrl extends Controller {
         // interval = setInterval(playClick, (60000 / d.startingTempo) / d.subdivision.value); //(60000 / temp) / sub divisoon
       })
 
-      Streamy.on(room.curValue + "PlayClick", function(d, s){
+      Streamy.on(met.metSettings.room + "PlayClick", function(d, s){
+        //on refactor remove start init stuff from click
+        $("#toggleStartStop").removeClass('start')
+        $("#toggleStartStop").addClass('stop')
+        $("#toggleStartStop").text("Stop")
+
         playClick()
       })
 
-      Streamy.on(room.curValue + "StopClick", function(d, s) {
+      Streamy.on(met.metSettings.room + "StopClick", function(d, s) {
         $("ion-content").css('background-color', 'white')
         clearInterval(interval)
         met.metSettings.running = false;
         workingTs = 1;
+        $("#toggleStartStop").addClass('start')
+        $("#toggleStartStop").removeClass('stop')
+        $("#toggleStartStop").text("Start")
       })
     } //end create room
 
