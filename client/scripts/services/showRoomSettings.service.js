@@ -13,7 +13,7 @@ export default class ShowRoomSettingsService extends Service {
 
   show(data) {
     this.scope = this.$rootScope.$resume();
-    debugger
+
     this.$ionicModal.fromTemplateUrl(this.templateUrl, {
       animation: 'slide-in-right',
       scope: this.scope,
@@ -22,13 +22,12 @@ export default class ShowRoomSettingsService extends Service {
     .then((modal) => {
       this.modal = modal;
       this.modal.show();
-      debugger
+
       this.modal.modelData.metSettings.room
     });
   }
 
   cancel() {
-    debugger
     this.scope.$destroy();
     this.modal.remove();
   }

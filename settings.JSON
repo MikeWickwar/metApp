@@ -1,10 +1,20 @@
 {
   "public":
   {
-    "analytics": "123456789"
+    "MONGO_URL": "mongodb+srv://metLinkAdmin:FuckingMongo1%21@cluster0-w8qh8.mongodb.net/test?retryWrites=true&w=majority"
+
   },
   "private":
   {
-    "MONGO_URL": "mongodb+srv://metLinkAdmin:FuckingMongo1!@metlinkcluster0-w8qh8.mongodb.net/test?retryWrites=true&w=majority"
+    "MONGO_URL": "mongodb+srv://metLinkAdmin:FuckingMongo1%21@cluster0-w8qh8.mongodb.net/test?retryWrites=true&w=majority"
+  },
+  "galaxy.meteor.com":
+  {
+    "env":
+    {
+      "DEPLOY_HOSTNAME": "metapphost.meteorapp.com",
+      "MONGO_URL": "mongodb+srv://metLinkAdmin:FuckingMongo1%21@cluster0-w8qh8.mongodb.net/test?retryWrites=true&w=majority"
+    }
   }
+
 }

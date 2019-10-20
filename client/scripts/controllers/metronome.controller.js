@@ -25,11 +25,13 @@ export default class MetromomeCtrl extends Controller {
       this.templateUrl = settingsTemplateUrl;
       var that = this;
       var acc = new Howl({
-          src: ['sounds/woodblock.wav']
+          src: ['sounds/woodblock.wav'],
+	        html5: true
         });
 
       var unAcc = new Howl({
-          src: ['sounds/block.wav']
+          src: ['sounds/block.wav'],
+	        html5: true
         });
 
       this.metSettings = {
@@ -92,7 +94,7 @@ export default class MetromomeCtrl extends Controller {
 
     this.startClick = function() {
       //shoots msg to the server to broadcast start and apply met settings
-      met.metSettings.rrom !== $("input[name=hiddenRoom]").val() ? met.metSettings.room = $("input[name=hiddenRoom]").val() : met.metSettings.room = met.metSettings.room;
+      met.metSettings.room !== $("input[name=hiddenRoom]").val() ? met.metSettings.room = $("input[name=hiddenRoom]").val() : met.metSettings.room = met.metSettings.room;
       if($("input[name=hiddenRoom]").val() !== ""){
         Streamy.emit("Start", met.metSettings);
       }else{

@@ -28,4 +28,17 @@
 *---------------++++++++--------+++++++++------------*
 
 ##To Do Next
-_next session: focus on lining up the click on different Clients_
+_next session: https://guide.meteor.com/mobile.html#submitting-ios
+--https://galaxy.meteor.com/mwickwar
+--db is hosted at cloud.mongodb.com
+--pw FuckingMeteor1!
+--deployment is failing
+
+--mongodb
+--https://cloud.mongodb.com/v2/5d6c65e09ccf64237cb51afd#clusters/detail/Cluster0
+
+--Next steps
+1. Get deployed Done http://metapphost.meteorapp.com/#!/main/Metronome
+2. make sure proof of concept is solid
+3. Get build for phonegap or however i can get this thing signed and deployed to app super_meteor_debug
+4. clean up the edges and make this a thing
